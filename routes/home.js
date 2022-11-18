@@ -1,4 +1,5 @@
 const {Router} = require('express');
+const User = require('../models/user')
 
 const router = Router();
 
@@ -7,7 +8,12 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    console.log(req.body)
+    const user = new User({
+        name: req.body.name,
+        phone: req.body.phone,
+    });
+    user.save();
+
     res.redirect('/')
 })
 
