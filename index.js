@@ -5,6 +5,9 @@ const homeRoute = require('./routes/home');
 const aboutRoute = require('./routes/about')
 const mongoose = require('mongoose');
 const mongoDBUrl = 'mongodb+srv://igo:1111@cluster0.1zcfovv.mongodb.net/?retryWrites=true&w=majority';
+const {graphqlHTTP} = require('express-graphql');
+const resolver = require('./graphql/resolver');
+const schema = require('./graphql/schema');
 
 const PORT = process.env.PORT || 3000
 const hbs = exphbs.create({
@@ -19,6 +22,13 @@ app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}))
 app.use(homeRoute);
 app.use(aboutRoute);
+app.use(express.json())
+
+app.use('/graphql', graphqlHTTP({
+    schema: schema,
+    rootValue: resolver,
+    graphiql: true,
+}));
 
 async function start () {
     try {
